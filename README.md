@@ -4,6 +4,4 @@ Consistent hashing is used in distributed systems to efficiently distribute data
 
 #### Features
 1. This library use md5 from hashlib. Get the string value (hex digest) and convert it into a string
-2. Nodes are stored in cache and can be accessed by a getter function
-
 #### 
