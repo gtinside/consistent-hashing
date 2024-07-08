@@ -6,6 +6,7 @@ class ConsistentHashingImpl:
     def __init__(self, max_hash:int=2**10) -> None:
         self.max = max_hash
         self.node_hash_map = dict()
+        self.key_node_map = dict()
     
     def hash(self, key:str):
         """ Function to generate an md5 hash and modulo it with 2^10, the max hash on the ring
@@ -37,18 +38,32 @@ class ConsistentHashingImpl:
             raise ValueError("Node: %s is already present in the ring" % node_id)
     
     def get_node_for_data(self, key:str):
+        """ Function to look in the ring and find the node that will
+        store the key
+        
+        Parameters:
+        key (str): The key that needs to be stored
+
+        Returns:
+        str: The name of the node
+        
+        """
         left_hash = 0
         key_hash = self.hash(key)
         for right_hash, node in self.node_hash_map.items():
-            last_node = node
             if key_hash > left_hash and key_hash < right_hash:
-                return node
+                self.key_node_map[key] = node
+                return self.key_node_map[key]
             left_hash = right_hash
-        return self.node_hash_map[list(self.node_hash_map.keys())[-1]]
+        self.key_node_map[key] = self.node_hash_map[list(self.node_hash_map.keys())[-1]]
+        return self.key_node_map[key]
 
 
 
 consistent_hashing_impl = ConsistentHashingImpl()
-print(consistent_hashing_impl.add_node("gaurav"))
-print(consistent_hashing_impl.add_node("charu"))
-print(consistent_hashing_impl.add_node("adhrit"))
+print(consistent_hashing_impl.add_node("node1"))
+print(consistent_hashing_impl.add_node("node2"))
+print(consistent_hashing_impl.add_node("node3"))
+
+print("Key will be stored in node :%s" % consistent_hashing_impl.get_node_for_data("python"))
+print("Key will be stored in node :%s" % consistent_hashing_impl.get_node_for_data("Java"))
