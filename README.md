@@ -4,7 +4,10 @@ Consistent hashing is used in distributed systems to efficiently distribute data
 
 #### Step-by-Step Implementation
 1. Create a Hash function: This library use md5 from hashlib. Get the string value (hex digest) and convert it into a string
-2. Node representation 
+2. Node representation
 3. Virtual Nodes (Coming soon!!)
 4. Hash Ring construction
 5. Mapping data to nodes
+6. Persisting the consistent hash via Log Structured Merge Tree (LSMT)
+
+#### 
