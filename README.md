@@ -30,4 +30,4 @@ Key will be stored in node :node1
 ```
 
 #### Installation 
-```pip install py-consistent-hash==1.0.0```
+```pip install py-consistent-hash```
