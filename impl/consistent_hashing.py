@@ -1,12 +1,16 @@
 import sys
 import hashlib
 import logging
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO, format='%(asctime)s: %(message)s')
+
 
 class ConsistentHashingImpl:
     def __init__(self, max_hash:int=2**10) -> None:
         self.max = max_hash
         self.node_hash_map = dict()
         self.key_node_map = dict()
+
     
     def hash(self, key:str):
         """ Function to generate an md5 hash and modulo it with 2^10, the max hash on the ring
@@ -18,7 +22,7 @@ class ConsistentHashingImpl:
         str: Hex digest
         
         """
-        print("Generating hash for key: %s" % key)
+        logger.info("Generating hash for key: %s" % key)
         return int(hashlib.md5(key.encode('utf-8')).hexdigest(), base=16) % self.max
     
     def add_node(self, node_id:str):
@@ -57,13 +61,15 @@ class ConsistentHashingImpl:
             left_hash = right_hash
         self.key_node_map[key] = self.node_hash_map[list(self.node_hash_map.keys())[-1]]
         return self.key_node_map[key]
+    
+    def get_key_node_map(self):
+        """
+        Function to return the map of which node holds what key
 
+        Parameters:
+        None
 
-
-consistent_hashing_impl = ConsistentHashingImpl()
-print(consistent_hashing_impl.add_node("node1"))
-print(consistent_hashing_impl.add_node("node2"))
-print(consistent_hashing_impl.add_node("node3"))
-
-print("Key will be stored in node :%s" % consistent_hashing_impl.get_node_for_data("python"))
-print("Key will be stored in node :%s" % consistent_hashing_impl.get_node_for_data("Java"))
+        Returns:
+        dict: The key node map
+        """
+        return self.key_node_map
